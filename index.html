@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>FrameTube player</title>
+<style>html,body{margin:0;height:100%;background:#000}iframe{position:fixed;inset:0;width:100%;height:100%;border:0}</style>
+</head>
+<body>
+<script>
+  // Промежуточная страница: YouTube видит адрес этого сайта и не выдаёт ошибку 153
+  const p = new URLSearchParams(location.search);
+  const id = (p.get('v') || '').replace(/[^\w-]/g, '');
+  const list = (p.get('list') || '').replace(/[^\w-]/g, '');
+  const q = new URLSearchParams({ autoplay: '1', rel: '0', playsinline: '1' });
+  if (/^\d+$/.test(p.get('t') || '')) q.set('start', p.get('t'));
+  if (list) q.set('list', list);
+  const f = document.createElement('iframe');
+  f.src = `https://www.youtube-nocookie.com/embed/${id || 'videoseries'}?${q}`;
+  f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+  f.allowFullscreen = true;
+  f.referrerPolicy = 'strict-origin-when-cross-origin';
+  document.body.appendChild(f);
+</script>
+</body>
+</html>
